@@ -160,24 +160,7 @@ public class MecanumDrive {
 
 	public MecanumDrive calcGyroStabilized(double x, double y, double target) {
         double gyroAngle = this.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-
-		if (target - (gyroAngle + gyroModifier) > 180) {
-			gyroModifier += 360;
-        }
-		if (target - (gyroAngle + gyroModifier) < -179) {
-			gyroModifier -= 360;
-        }
-
-		/*
-		 * This 1 and -1 should probably be variable as we get closer to our targets.
-		 */
-
-		if (target - (gyroAngle + gyroModifier) > 0) {
-			calculateDirectionsRobotCentric(x, y, clip((target - (gyroAngle + gyroModifier))/-8));
-		}
-		if (target - (gyroAngle + gyroModifier) < 0) {
-			calculateDirectionsRobotCentric(x, y, clip((target - (gyroAngle + gyroModifier))/-8));
-		}
+		calculateDirectionsRobotCentric(x, y, clip((((target - gyroAngle) % 360) - 180) / -8));
 
         
         //see Roman if this doesn't work. He doesn't know how it works either, but he made it.
